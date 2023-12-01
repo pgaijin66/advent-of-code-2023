@@ -9,36 +9,39 @@ import (
 	"unicode"
 )
 
-var inputValues []string
-
-var calibrationValues []int
-
 type Number int
 
-var NumberNames = map[Number]string{
-	0: "zero",
-	1: "one",
-	2: "two",
-	3: "three",
-	4: "four",
-	5: "five",
-	6: "six",
-	7: "seven",
-	8: "eight",
-	9: "nine",
-}
+var (
+	inputValues       []string
+	calibrationValues []int
+)
 
-var ReverseNumberNames map[string]Number
+var (
+	NumberNames = map[Number]string{
+		0: "zero",
+		1: "one",
+		2: "two",
+		3: "three",
+		4: "four",
+		5: "five",
+		6: "six",
+		7: "seven",
+		8: "eight",
+		9: "nine",
+	}
+	ReverseNumberNames map[string]Number
+)
 
 func init() {
+	// Read input from file
 	file, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatalf("could not open file: %s", err)
 	}
 	defer file.Close()
 
+	// Scan individual files
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
 		inputValues = append(inputValues, scanner.Text())
 	}
@@ -47,6 +50,11 @@ func init() {
 		log.Fatalf("Error reading file: %s", err)
 	}
 
+	// Create reverse number name map for easier lookup
+	InitializeReverseNumberNames()
+}
+
+func InitializeReverseNumberNames() {
 	ReverseNumberNames = make(map[string]Number)
 	for num, name := range NumberNames {
 		ReverseNumberNames[strings.ToLower(name)] = num
@@ -68,14 +76,40 @@ func IsCharStartForAnyNumber(char rune) bool {
 	return false
 }
 
+func FindNumberFromWords(input string) int {
+	var currentNumberInWord string
+	var number int
+
+	for _, char := range input {
+		if unicode.IsLetter(char) {
+			currentNumberInWord += string(char)
+			if IsValidWord(currentNumberInWord) {
+				number = int(ReverseNumberNames[strings.ToLower(currentNumberInWord)])
+				// fmt.Println("Found a valid word: ", number)
+				return number
+			}
+		}
+	}
+
+	return number
+}
+
+func removeZeros(input []int) []int {
+	var result []int
+	for _, num := range input {
+		if num != 0 {
+			result = append(result, num)
+		}
+	}
+	return result
+}
+
 func GetCalibrationValues(input string) (int, error) {
 	var firstDigit, lastDigit int
 	var foundFirstDigit bool
 	var numbers []int
-	// var remainingString string
 
 	for _, char := range input {
-		// fmt.Println("Checking char: ", string(char))
 		switch {
 		case unicode.IsDigit(char):
 			digitValue := int(char - '0')
@@ -103,34 +137,6 @@ func GetCalibrationValues(input string) (int, error) {
 	result := firstDigit*10 + lastDigit
 
 	return result, nil
-}
-
-func removeZeros(input []int) []int {
-	var result []int
-	for _, num := range input {
-		if num != 0 {
-			result = append(result, num)
-		}
-	}
-	return result
-}
-
-func FindNumberFromWords(input string) int {
-	var currentNumberInWord string
-	var number int
-
-	for _, char := range input {
-		if unicode.IsLetter(char) {
-			currentNumberInWord += string(char)
-			if IsValidWord(currentNumberInWord) {
-				number = int(ReverseNumberNames[strings.ToLower(currentNumberInWord)])
-				// fmt.Println("Found a valid word: ", number)
-				return number
-			}
-		}
-	}
-
-	return number
 }
 
 func GetSum(values []string) int {
