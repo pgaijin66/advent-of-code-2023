@@ -21,15 +21,15 @@ func TestGetSum(t *testing.T) {
 			expectedSum: 281,
 		},
 		{
-			name:        "Handle numeronym (eg: twone for 2 and 1, threeight for 3 and 8)",
-			inputValues: []string{"flhmtwoonexc", "threeight"},
+			name:        "Handle numeronym (eg: twone for 2 and 1, threeight for 3 and 8, oneight for 1 and 8)",
+			inputValues: []string{"flhmtwonexc", "threeight"},
 			expectedSum: 59,
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			sum := GetSum(testCase.inputValues)
+			sum := CalculateSum(testCase.inputValues)
 
 			if sum != testCase.expectedSum {
 				t.Errorf("Expected sum %d, but got %d", testCase.expectedSum, sum)
