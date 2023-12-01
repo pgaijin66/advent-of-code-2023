@@ -11,14 +11,19 @@ func TestGetSum(t *testing.T) {
 		expectedSum int
 	}{
 		{
-			name:        "Valid values",
+			name:        "Handle digits",
+			inputValues: []string{"1abc2", "pqr3stu8vwx", "a1b2c3d4e5f", "treb7uchet"},
+			expectedSum: 142,
+		},
+		{
+			name:        "Handle digit and number in words ",
 			inputValues: []string{"two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen"},
 			expectedSum: 281,
 		},
 		{
-			name:        "Valid values",
-			inputValues: []string{"flhmdp6eighteightmcxcvffive"},
-			expectedSum: 65,
+			name:        "Handle numeronym (eg: twone for 2 and 1, threeight for 3 and 8)",
+			inputValues: []string{"flhmtwoonexc", "threeight"},
+			expectedSum: 59,
 		},
 	}
 

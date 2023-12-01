@@ -53,7 +53,7 @@ func init() {
 	}
 }
 
-func isValidWord(word string) bool {
+func IsValidWord(word string) bool {
 	_, ok := ReverseNumberNames[strings.ToLower(word)]
 	return ok
 }
@@ -72,10 +72,10 @@ func GetCalibrationValues(input string) (int, error) {
 	var firstDigit, lastDigit int
 	var foundFirstDigit bool
 	var numbers []int
-	var remainingString string
+	// var remainingString string
 
 	for _, char := range input {
-		fmt.Println("Checking char: ", string(char))
+		// fmt.Println("Checking char: ", string(char))
 		switch {
 		case unicode.IsDigit(char):
 			digitValue := int(char - '0')
@@ -87,23 +87,14 @@ func GetCalibrationValues(input string) (int, error) {
 			numbers = append(numbers, digitValue)
 
 		case IsCharStartForAnyNumber(char):
-			fmt.Println("Found: ", string(char))
-			fmt.Println("Checking Substring: ", input)
-			indexOfChar := strings.Index(input, string(char))
-			remainingString = input[indexOfChar:]
-			a := FindNumberFromWords(string(remainingString))
+			a := FindNumberFromWords(string(input))
 			if a != 0 {
 				numbers = append(numbers, a)
 			}
-			input = remainingString
-
-		default:
-			indexOfChar := strings.Index(input, string(char))
-			remainingString = input[indexOfChar:]
-			input = remainingString
-			fmt.Println("new string", input)
 		}
 
+		indexOfChar := strings.Index(input, string(char))
+		input = input[indexOfChar+1:]
 	}
 
 	newArray := removeZeros(numbers)
@@ -131,8 +122,9 @@ func FindNumberFromWords(input string) int {
 	for _, char := range input {
 		if unicode.IsLetter(char) {
 			currentNumberInWord += string(char)
-			if isValidWord(currentNumberInWord) {
+			if IsValidWord(currentNumberInWord) {
 				number = int(ReverseNumberNames[strings.ToLower(currentNumberInWord)])
+				// fmt.Println("Found a valid word: ", number)
 				return number
 			}
 		}
@@ -153,7 +145,6 @@ func GetSum(values []string) int {
 		sum += value
 
 	}
-	fmt.Println(calibrationValues)
 
 	return sum
 }
