@@ -55,7 +55,7 @@ func CalculateSum(values []string) int {
 	var sum int
 
 	for _, value := range values {
-		value, err := getCalibrationValues(value)
+		value, err := getCalibrationValue(value)
 		if err != nil {
 			log.Fatalf("could not get calibration value: %s", err)
 		}
@@ -66,7 +66,7 @@ func CalculateSum(values []string) int {
 	return sum
 }
 
-func getCalibrationValues(input string) (int, error) {
+func getCalibrationValue(input string) (int, error) {
 	var firstDigit, lastDigit int
 	var calibrationValue []int
 
