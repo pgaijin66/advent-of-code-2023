@@ -11,4 +11,4 @@
 
 - [Day 3](https://github.com/pgaijin66/advent-of-code-2023/tree/main/Day%203)
 
-
+- [Day 4](https://github.com/pgaijin66/advent-of-code-2023/tree/main/Day%204)
